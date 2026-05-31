@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santi Vadala // Python Dev & Cyber Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kali-blue: #1e4d7b;
+    --kali-light: #367cc4;
+    --kali-bright: #5ba3e8;
+    --kali-cyan: #00d4ff;
+    --kali-bg: #0d1117;
+    --kali-dark: #0a0f16;
+    --kali-panel: rgba(14, 24, 40, 0.92);
+    --kali-border: rgba(91, 163, 232, 0.3);
+    --kali-glow: rgba(0, 212, 255, 0.15);
+    --text-primary: #e8f4fd;
+    --text-muted: #7ab3d4;
+    --text-dim: #3a6b8a;
+    --terminal-green: #39ff14;
+    --terminal-red: #ff4444;
+    --terminal-yellow: #ffcc00;
+    --taskbar-h: 38px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    background: var(--kali-dark);
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    cursor: default;
+  }
+
+  /* ── WALLPAPER ── */
+  #wallpaper {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(91,163,232,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, rgba(0,60,120,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 10%, rgba(30,77,123,0.15) 0%, transparent 50%),
+      linear-gradient(135deg, #0a0f16 0%, #0d1a2e 40%, #0e2040 70%, #0a1520 100%);
+    z-index: 0;
+  }
+
+  /* Cubes SVG background effect */
+  #wallpaper::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(135deg, transparent 45%, rgba(91,163,232,0.04) 45%, rgba(91,163,232,0.04) 55%, transparent 55%),
+      linear-gradient(45deg, transparent 45%, rgba(30,77,123,0.06) 45%, rgba(30,77,123,0.06) 55%, transparent 55%);
+    background-size: 120px 120px, 80px 80px;
+  }
+
+  #wallpaper::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 65% 50%, rgba(14,32,64,0.0) 0%, rgba(10,15,22,0.3) 100%);
+  }
+
+  /* ── DESKTOP ── */
+  #desktop {
+    position: fixed; inset: 0 0 var(--taskbar-h) 0;
+    z-index: 1;
+  }
+
+  /* ── DESKTOP ICONS ── */
+  .icon-grid {
+    position: absolute;
+    top: 20px; left: 20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .desk-icon {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; padding: 8px 6px; border-radius: 6px;
+    cursor: pointer; width: 72px;
+    transition: background 0.15s;
+  }
+  .desk-icon:hover { background: rgba(91,163,232,0.15); }
+  .desk-icon:active { background: rgba(91,163,232,0.25); }
+  .desk-icon .ico { font-size: 28px; filter: drop-shadow(0 0 8px rgba(0,212,255,0.4)); }
+  .desk-icon span { font-size: 10px; color: var(--text-primary); text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8); word-break: break-word; line-height: 1.2; }
+
+  /* ── TASKBAR ── */
+  #taskbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: var(--taskbar-h);
+    background: rgba(8, 16, 28, 0.97);
+    border-top: 1px solid var(--kali-border);
+    backdrop-filter: blur(20px);
+    z-index: 9999;
+    display: flex; align-items: center;
+    padding: 0 8px; gap: 4px;
+  }
+
+  #kali-menu-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 4px;
+    background: linear-gradient(135deg, var(--kali-blue), #0e2a50);
+    border: 1px solid var(--kali-border);
+    cursor: pointer; color: var(--text-primary);
+    font-family: 'Share Tech Mono', monospace; font-size: 12px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  #kali-menu-btn:hover { background: linear-gradient(135deg, var(--kali-light), var(--kali-blue)); border-color: var(--kali-bright); }
+  #kali-menu-btn .dragon { font-size: 16px; }
+
+  .taskbar-sep { width: 1px; height: 20px; background: var(--kali-border); margin: 0 4px; }
+
+  .tb-task {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 4px;
+    background: rgba(91,163,232,0.08); border: 1px solid rgba(91,163,232,0.15);
+    cursor: pointer; color: var(--text-muted); font-size: 11px;
+    font-family: 'Share Tech Mono', monospace;
+    transition: all 0.15s; max-width: 160px;
+  }
+  .tb-task:hover { background: rgba(91,163,232,0.18); color: var(--text-primary); }
+  .tb-task.active { background: rgba(91,163,232,0.22); border-color: var(--kali-bright); color: var(--text-primary); }
+  .tb-task .t-ico { font-size: 13px; }
+
+  .taskbar-right {
+    margin-left: auto; display: flex; align-items: center; gap: 10px;
+    padding-right: 4px; font-size: 11px; color: var(--text-muted);
+  }
+  .tb-clock { font-family: 'Share Tech Mono', monospace; color: var(--kali-cyan); }
+  .tb-status { display: flex; gap: 6px; align-items: center; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot-green { background: var(--terminal-green); box-shadow: 0 0 6px var(--terminal-green); }
+  .dot-blue { background: var(--kali-bright); box-shadow: 0 0 6px var(--kali-bright); }
+
+  /* ── WINDOW BASE ── */
+  .window {
+    position: absolute;
+    min-width: 320px; min-height: 200px;
+    background: var(--kali-panel);
+    border: 1px solid var(--kali-border);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(91,163,232,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+    transition: box-shadow 0.2s;
+  }
+  .window.focused {
+    box-shadow: 0 24px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(91,163,232,0.2), 0 0 30px rgba(0,212,255,0.05);
+    z-index: 200;
+  }
+  .window.minimized { display: none; }
+
+  /* Titlebar */
+  .win-title {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 10px; height: 32px;
+    background: linear-gradient(90deg, rgba(14,32,64,0.9), rgba(10,22,44,0.9));
+    border-bottom: 1px solid var(--kali-border);
+    cursor: move; flex-shrink: 0;
+  }
+  .win-controls { display: flex; gap: 5px; }
+  .win-btn {
+    width: 12px; height: 12px; border-radius: 50%; border: none;
+    cursor: pointer; transition: filter 0.15s; flex-shrink: 0;
+  }
+  .win-btn.close { background: #ff5f57; }
+  .win-btn.minimize { background: #febc2e; }
+  .win-btn.maximize { background: #28c840; }
+  .win-btn:hover { filter: brightness(1.3); }
+  .win-title-text {
+    font-size: 11px; color: var(--text-muted); font-family: 'Share Tech Mono', monospace;
+    flex: 1; text-align: center;
+  }
+  .win-title-icon { font-size: 14px; }
+
+  /* Window content area */
+  .win-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* Resize handle */
+  .win-resize {
+    position: absolute; bottom: 0; right: 0;
+    width: 14px; height: 14px; cursor: se-resize;
+    opacity: 0.4;
+  }
+  .win-resize::after {
+    content: '◢'; position: absolute; bottom: 2px; right: 2px;
+    font-size: 12px; color: var(--kali-bright);
+  }
+
+  /* ── TERMINAL WINDOW ── */
+  #terminal-win { width: 680px; height: 420px; top: 80px; left: 60px; }
+  
+  .terminal-body {
+    background: rgba(5, 10, 18, 0.98);
+    flex: 1; overflow: hidden; display: flex; flex-direction: column;
+    padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .terminal-output {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    font-size: 12.5px; line-height: 1.6;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+  .terminal-output::-webkit-scrollbar { width: 4px; }
+  .terminal-output::-webkit-scrollbar-thumb { background: var(--kali-blue); border-radius: 2px; }
+
+  .t-line { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 1px; }
+  .t-prompt { color: var(--terminal-green); white-space: nowrap; }
+  .t-prompt .t-user { color: #00d4ff; }
+  .t-prompt .t-at { color: var(--text-muted); }
+  .t-prompt .t-host { color: #39ff14; }
+  .t-prompt .t-path { color: var(--kali-bright); }
+  .t-prompt .t-dollar { color: #fff; margin-right: 6px; }
+  .t-output { color: var(--text-primary); }
+  .t-error { color: var(--terminal-red); }
+  .t-info { color: var(--kali-cyan); }
+  .t-success { color: var(--terminal-green); }
+  .t-warn { color: var(--terminal-yellow); }
+  .t-comment { color: var(--text-dim); }
+  .t-cmd { color: #fff; }
+
+  .terminal-input-row {
+    display: flex; align-items: center; gap: 0;
+    margin-top: 4px; flex-shrink: 0;
+  }
+  .t-input-prompt { color: var(--terminal-green); white-space: nowrap; font-size: 12.5px; }
+  .t-input-prompt .t-user { color: #00d4ff; }
+  .t-input-prompt .t-host { color: #39ff14; }
+  .t-input-prompt .t-path { color: var(--kali-bright); }
+  .t-input-prompt .t-dollar { color: #fff; margin-right: 6px; }
+
+  #terminal-input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: #fff; font-family: 'Share Tech Mono', monospace; font-size: 12.5px;
+    caret-color: var(--terminal-green);
+  }
+
+  /* ── ABOUT WINDOW ── */
+  #about-win { width: 560px; height: 480px; top: 60px; left: 800px; }
+
+  .about-body {
+    padding: 20px; overflow-y: auto; flex: 1;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+
+  .profile-header {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 20px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--kali-border);
+  }
+  .avatar-ring {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 2px solid var(--kali-bright);
+    background: linear-gradient(135deg, var(--kali-blue), #0a1a30);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(91,163,232,0.3);
+  }
+  .profile-info h1 {
+    font-family: 'Orbitron', monospace; font-size: 18px;
+    color: var(--kali-cyan); font-weight: 700;
+    text-shadow: 0 0 20px rgba(0,212,255,0.4);
+  }
+  .profile-info .role {
+    color: var(--text-muted); font-size: 12px; margin-top: 3px;
+  }
+  .profile-info .tags { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+  .tag {
+    padding: 2px 8px; border-radius: 3px; font-size: 10px;
+    background: rgba(91,163,232,0.12); border: 1px solid rgba(91,163,232,0.25);
+    color: var(--kali-bright);
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace; font-size: 11px;
+    color: var(--kali-cyan); letter-spacing: 2px;
+    margin-bottom: 10px; margin-top: 16px;
+    text-transform: uppercase;
+  }
+  .section-title::before { content: '> '; color: var(--terminal-green); }
+
+  .skill-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 7px;
+  }
+  .skill-name { font-size: 11px; color: var(--text-muted); width: 110px; flex-shrink: 0; }
+  .skill-bar { flex: 1; height: 5px; background: rgba(91,163,232,0.1); border-radius: 3px; overflow: hidden; }
+  .skill-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--kali-blue), var(--kali-cyan));
+    box-shadow: 0 0 8px rgba(0,212,255,0.4);
+    transition: width 1s ease;
+  }
+  .skill-pct { font-size: 10px; color: var(--kali-bright); width: 28px; text-align: right; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .info-item {
+    padding: 8px 10px; border-radius: 4px;
+    background: rgba(91,163,232,0.05); border: 1px solid rgba(91,163,232,0.1);
+  }
+  .info-item .lbl { font-size: 10px; color: var(--text-dim); margin-bottom: 3px; }
+  .info-item .val { font-size: 12px; color: var(--text-primary); }
+
+  /* ── CTF WINDOW ── */
+  #ctf-win { width: 600px; height: 440px; top: 120px; left: 160px; }
+
+  .ctf-body {
+    padding: 16px; overflow-y: auto; flex: 1;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+
+  .ctf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ctf-card {
+    padding: 12px; border-radius: 6px;
+    background: rgba(91,163,232,0.05); border: 1px solid rgba(91,163,232,0.12);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .ctf-card:hover { background: rgba(91,163,232,0.1); border-color: var(--kali-bright); transform: translateY(-1px); }
+  .ctf-card .ctf-name { font-size: 13px; color: var(--kali-cyan); font-family: 'Orbitron', monospace; font-size: 11px; }
+  .ctf-card .ctf-cat { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+  .ctf-card .ctf-pts {
+    display: inline-block; margin-top: 6px; padding: 2px 7px;
+    border-radius: 3px; font-size: 10px;
+    background: rgba(57,255,20,0.1); border: 1px solid rgba(57,255,20,0.2);
+    color: var(--terminal-green);
+  }
+  .ctf-card .ctf-diff {
+    float: right; margin-top: 6px; font-size: 10px; color: var(--terminal-yellow);
+  }
+
+  .ctf-stats {
+    display: flex; gap: 10px; margin-bottom: 16px;
+  }
+  .stat-box {
+    flex: 1; padding: 10px; border-radius: 6px; text-align: center;
+    background: rgba(91,163,232,0.07); border: 1px solid rgba(91,163,232,0.15);
+  }
+  .stat-box .sv { font-family: 'Orbitron', monospace; font-size: 20px; color: var(--kali-cyan); }
+  .stat-box .sl { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+
+  /* ── TOOLS WINDOW ── */
+  #tools-win { width: 380px; height: 360px; top: 200px; left: 500px; }
+  .tools-body { padding: 14px; overflow-y: auto; flex: 1; }
+  .tool-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 4px; margin-bottom: 4px;
+    border: 1px solid transparent; cursor: pointer; transition: all 0.15s;
+  }
+  .tool-item:hover { background: rgba(91,163,232,0.08); border-color: rgba(91,163,232,0.15); }
+  .tool-ico { font-size: 18px; width: 24px; text-align: center; }
+  .tool-name { font-size: 12px; color: var(--text-primary); }
+  .tool-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+  .tool-badge {
+    margin-left: auto; padding: 2px 6px; border-radius: 3px; font-size: 9px;
+    background: rgba(91,163,232,0.1); color: var(--kali-bright);
+  }
+
+  /* ── FILE MANAGER ── */
+  #files-win { width: 500px; height: 380px; top: 180px; left: 380px; }
+  .files-body { display: flex; flex: 1; overflow: hidden; }
+  .files-sidebar {
+    width: 120px; flex-shrink: 0; border-right: 1px solid var(--kali-border);
+    padding: 8px 0; background: rgba(8,16,28,0.5);
+  }
+  .files-sidebar-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; font-size: 11px; color: var(--text-muted);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .files-sidebar-item:hover, .files-sidebar-item.active {
+    background: rgba(91,163,232,0.12); color: var(--text-primary);
+  }
+  .files-main { flex: 1; padding: 10px; overflow-y: auto; }
+  .files-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .file-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; padding: 8px 4px; border-radius: 4px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .file-item:hover { background: rgba(91,163,232,0.12); }
+  .file-item .f-ico { font-size: 24px; }
+  .file-item .f-name { font-size: 9px; color: var(--text-muted); text-align: center; word-break: break-all; }
+
+  /* ── CONTEXT MENU ── */
+  #ctx-menu {
+    position: fixed; z-index: 99999;
+    background: rgba(10,18,32,0.97); border: 1px solid var(--kali-border);
+    border-radius: 6px; padding: 4px 0; min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: none;
+    backdrop-filter: blur(20px);
+  }
+  .ctx-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px; font-size: 12px; color: var(--text-muted);
+    cursor: pointer; transition: background 0.1s;
+  }
+  .ctx-item:hover { background: rgba(91,163,232,0.1); color: var(--text-primary); }
+  .ctx-sep { height: 1px; background: var(--kali-border); margin: 3px 0; }
+  .ctx-ico { font-size: 13px; width: 16px; }
+
+  /* ── BOOT SCREEN ── */
+  #boot-screen {
+    position: fixed; inset: 0; z-index: 99998;
+    background: #000;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .boot-logo {
+    font-family: 'Orbitron', monospace; font-size: 36px; font-weight: 900;
+    color: var(--kali-cyan); text-shadow: 0 0 40px rgba(0,212,255,0.6);
+    margin-bottom: 8px; letter-spacing: 6px;
+  }
+  .boot-sub { color: var(--text-dim); font-size: 11px; letter-spacing: 3px; margin-bottom: 40px; }
+  .boot-log {
+    font-size: 11px; color: #3a6b8a; max-width: 500px; width: 100%;
+    text-align: left; line-height: 1.8; min-height: 180px;
+  }
+  .boot-log .b-ok { color: var(--terminal-green); }
+  .boot-log .b-info { color: var(--kali-bright); }
+  .boot-log .b-warn { color: var(--terminal-yellow); }
+  .boot-progress-bar {
+    width: 300px; height: 3px; background: rgba(91,163,232,0.1);
+    border-radius: 2px; margin-top: 20px; overflow: hidden;
+  }
+  .boot-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--kali-blue), var(--kali-cyan));
+    width: 0%; transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(0,212,255,0.5);
+  }
+
+  /* NOTIFICATIONS */
+  #notif-container {
+    position: fixed; top: 16px; right: 16px; z-index: 9998;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .notif {
+    padding: 10px 14px; border-radius: 6px; min-width: 220px;
+    background: rgba(10,22,44,0.96); border: 1px solid var(--kali-border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    font-size: 11px; color: var(--text-primary);
+    animation: notifIn 0.3s ease; backdrop-filter: blur(16px);
+  }
+  .notif.out { animation: notifOut 0.3s ease forwards; }
+  .notif-title { color: var(--kali-cyan); font-size: 10px; letter-spacing: 1px; margin-bottom: 3px; }
+  @keyframes notifIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes notifOut { from { opacity: 1; } to { opacity: 0; transform: translateX(40px); } }
+
+  /* SCROLLBARS */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(91,163,232,0.2); border-radius: 2px; }
+
+  /* TERMINAL LINKS */
+  .t-line {
+    color: var(--text-primary);
+  }
+  .t-line a {
+    color: #39ff14;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: 0 0 6px rgba(57,255,20,0.4);
+  }
+  .t-line a:hover {
+    color: #00d4ff;
+    text-shadow: 0 0 12px rgba(0,212,255,0.6);
+  }
+  .t-line a:active {
+    color: #ff4444;
+  }
+
+  /* SCAN LINE EFFECT */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 99997; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+  }
+
+  /* MOBILE RESPONSIVE IMPROVEMENTS */
+  @media (max-width: 768px) {
+    #terminal-win { width: calc(100vw - 20px); height: 60vh; top: 10px; left: 10px; }
+    .terminal-body { padding: 8px; }
+    .terminal-output { font-size: 11px; line-height: 1.5; }
+    #terminal-input { font-size: 11px; }
+    .t-prompt, .t-input-prompt { font-size: 11px; }
+  }
+  @media (max-width: 480px) {
+    #terminal-win { width: calc(100vw - 10px); height: 50vh; top: 5px; left: 5px; }
+    .terminal-body { padding: 6px; }
+    .terminal-output { font-size: 10px; line-height: 1.4; }
+    #terminal-input { font-size: 10px; }
+    .t-prompt, .t-input-prompt { font-size: 10px; }
+    .t-line { margin-bottom: 0px; }
+    .win-title-text { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+  <div class="boot-logo">KALI</div>
+  <div class="boot-sub">SOC ANALYST WORKSTATION v2.0</div>
+  <div class="boot-log" id="boot-log"></div>
+  <div class="boot-progress-bar"><div class="boot-progress-fill" id="boot-bar"></div></div>
+</div>
+
+<!-- WALLPAPER -->
+<div id="wallpaper"></div>
+
+<!-- DESKTOP -->
+<div id="desktop" oncontextmenu="showCtxMenu(event)">
+  <div class="icon-grid">
+    <div class="desk-icon" ondblclick="openWindow('terminal-win'); addTask('terminal-win')">
+      <div class="ico">🖥️</div><span>Terminal</span>
+    </div>
+    <div class="desk-icon" ondblclick="openWindow('about-win'); addTask('about-win')">
+      <div class="ico">🐍</div><span>About Me</span>
+    </div>
+    <div class="desk-icon" ondblclick="openWindow('ctf-win'); addTask('ctf-win')">
+      <div class="ico">🚀</div><span>Progetti</span>
+    </div>
+    <div class="desk-icon" ondblclick="openWindow('tools-win'); addTask('tools-win')">
+      <div class="ico">🔧</div><span>Arsenal</span>
+    </div>
+    <div class="desk-icon" ondblclick="openWindow('files-win'); addTask('files-win')">
+      <div class="ico">📁</div><span>Files</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── TERMINAL WINDOW ── -->
+<div class="window" id="terminal-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'terminal-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('terminal-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('terminal-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('terminal-win')"></button>
+    </div>
+    <span class="win-title-text">🐍 santi@kali: ~/portfolio</span>
+  </div>
+  <div class="win-body">
+    <div class="terminal-body">
+      <div class="terminal-output" id="term-out"></div>
+      <div class="terminal-input-row">
+        <span class="t-input-prompt">
+          <span class="t-user">santi</span><span style="color:#7ab3d4">@</span><span class="t-host">kali</span><span style="color:#7ab3d4">:</span><span class="t-path" id="term-path">~</span><span class="t-dollar"> $</span>
+        </span>
+        <input type="text" id="terminal-input" autocomplete="off" spellcheck="false"
+          onkeydown="handleTermInput(event)" placeholder="" autofocus>
+      </div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'terminal-win')"></div>
+</div>
+
+<!-- ── ABOUT WINDOW ── -->
+<div class="window" id="about-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'about-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('about-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('about-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('about-win')"></button>
+    </div>
+    <span class="win-title-text">👤 whoami — Profile</span>
+  </div>
+  <div class="win-body">
+    <div class="about-body">
+      <div class="profile-header">
+        <div class="avatar-ring">🐍</div>
+        <div class="profile-info">
+          <h1>Santi Vadala</h1>
+          <div class="role">Python Developer · Cyber Intelligence Specialist</div>
+          <div class="tags">
+            <span class="tag">OSINT</span>
+            <span class="tag">Automation</span>
+            <span class="tag">Pentesting</span>
+            <span class="tag">Linux</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">info</div>
+      <div class="info-grid">
+        <div class="info-item"><div class="lbl">Location</div><div class="val">Italia 🇮🇹</div></div>
+        <div class="info-item"><div class="lbl">Web</div><div class="val">santivadala.it</div></div>
+        <div class="info-item"><div class="lbl">OS</div><div class="val">Kali · Ubuntu · Arch</div></div>
+        <div class="info-item"><div class="lbl">Shell</div><div class="val">/bin/zsh</div></div>
+      </div>
+
+      <div class="section-title">bio</div>
+      <div style="font-size:11px;color:var(--text-muted);line-height:1.8;padding:8px 10px;background:rgba(91,163,232,0.04);border:1px solid rgba(91,163,232,0.1);border-radius:4px;margin-bottom:4px;">
+        Appassionato di sicurezza offensiva,<br>
+        automazione intelligente e OSINT.<br>
+        Trasformo dati in conoscenza,<br>
+        e codice in potere. 🐍
+      </div>
+
+      <div class="section-title">skills</div>
+      <div class="skill-row"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div><span class="skill-pct">95%</span></div>
+      <div class="skill-row"><span class="skill-name">Bash</span><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div><span class="skill-pct">78%</span></div>
+      <div class="skill-row"><span class="skill-name">SQL</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div><span class="skill-pct">72%</span></div>
+      <div class="skill-row"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div><span class="skill-pct">55%</span></div>
+      <div class="skill-row"><span class="skill-name">OSINT / Recon</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div><span class="skill-pct">90%</span></div>
+      <div class="skill-row"><span class="skill-name">Web Pentesting</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div><span class="skill-pct">82%</span></div>
+
+      <div class="section-title">contact</div>
+      <div class="info-grid">
+        <div class="info-item"><div class="lbl">GitHub</div><div class="val">github.com/santivadaladev</div></div>
+        <div class="info-item"><div class="lbl">LinkedIn</div><div class="val">/in/santivadaladev</div></div>
+        <div class="info-item"><div class="lbl">Web</div><div class="val">santivadala.it</div></div>
+        <div class="info-item"><div class="lbl">Status</div><div class="val" style="color:var(--terminal-green)">DM aperte ✓</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'about-win')"></div>
+</div>
+
+<!-- ── CTF WINDOW ── -->
+<div class="window" id="ctf-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'ctf-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('ctf-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('ctf-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('ctf-win')"></button>
+    </div>
+    <span class="win-title-text">🚀 Progetti — OsintBot · DarkScraper · ReconShell</span>
+  </div>
+  <div class="win-body">
+    <div class="ctf-body">
+      <div class="ctf-stats">
+        <div class="stat-box"><div class="sv">3</div><div class="sl">Progetti Principali</div></div>
+        <div class="stat-box"><div class="sv" style="color:#39ff14">Python</div><div class="sl">Stack Primario</div></div>
+        <div class="stat-box"><div class="sv" style="color:#ffcc00">OSINT</div><div class="sl">Specializzazione</div></div>
+      </div>
+      <div class="ctf-grid">
+        <div class="ctf-card" style="grid-column:span 2">
+          <div class="ctf-name">🤖 OsintBot</div>
+          <div class="ctf-cat">Framework OSINT automatizzato in Python</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:5px;">→ Raccolta dati · API aggregation · Report automatici</div>
+          <span class="ctf-pts">Python · Requests · APIs</span>
+          <span class="ctf-diff">⭐ Featured</span>
+        </div>
+        <div class="ctf-card" style="grid-column:span 2">
+          <div class="ctf-name">🕷️ DarkScraper</div>
+          <div class="ctf-cat">Web scraper etico per cyber intelligence</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:5px;">→ Scrapy · Tor · Elasticsearch · Anonimizzazione</div>
+          <span class="ctf-pts">Scrapy · Tor · ES</span>
+          <span class="ctf-diff">⭐ Featured</span>
+        </div>
+        <div class="ctf-card" style="grid-column:span 2">
+          <div class="ctf-name">🔍 ReconShell</div>
+          <div class="ctf-cat">Toolkit CLI per ricognizione passiva</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:5px;">→ Bash + Python · Shodan API · WHOIS · DNS enum</div>
+          <span class="ctf-pts">Bash · Python · Shodan</span>
+          <span class="ctf-diff">⭐ Featured</span>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--kali-bright);">
+        → Vedi tutti i progetti su <span style="color:var(--kali-cyan)">github.com/santivadaladev</span>
+      </div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'ctf-win')"></div>
+</div>
+
+<!-- ── TOOLS WINDOW ── -->
+<div class="window" id="tools-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'tools-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('tools-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('tools-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('tools-win')"></button>
+    </div>
+    <span class="win-title-text">🔧 Arsenal — Tools</span>
+  </div>
+  <div class="win-body">
+    <div class="tools-body">
+      <div class="tool-item"><span class="tool-ico">🐍</span><div><div class="tool-name">Python 3.x</div><div class="tool-desc">Scrapy · Selenium · Requests · FastAPI · Pwntools</div></div><span class="tool-badge">Primary</span></div>
+      <div class="tool-item"><span class="tool-ico">🕵️</span><div><div class="tool-name">OSINT Suite</div><div class="tool-desc">Maltego · Shodan · Recon-ng · theHarvester</div></div><span class="tool-badge">Intel</span></div>
+      <div class="tool-item"><span class="tool-ico">🗺️</span><div><div class="tool-name">Nmap</div><div class="tool-desc">Network Scanner & Port Discovery</div></div><span class="tool-badge">Recon</span></div>
+      <div class="tool-item"><span class="tool-ico">🕷️</span><div><div class="tool-name">Burp Suite</div><div class="tool-desc">Web Application Security Testing</div></div><span class="tool-badge">Web</span></div>
+      <div class="tool-item"><span class="tool-ico">🦈</span><div><div class="tool-name">Wireshark</div><div class="tool-desc">Packet Capture & Network Analysis</div></div><span class="tool-badge">Forensics</span></div>
+      <div class="tool-item"><span class="tool-ico">💉</span><div><div class="tool-name">Metasploit</div><div class="tool-desc">Exploitation Framework</div></div><span class="tool-badge">Exploit</span></div>
+      <div class="tool-item"><span class="tool-ico">🐳</span><div><div class="tool-name">Docker · Proxmox</div><div class="tool-desc">Containerizzazione & Virtualizzazione</div></div><span class="tool-badge">DevOps</span></div>
+      <div class="tool-item"><span class="tool-ico">📊</span><div><div class="tool-name">Pandas · Elasticsearch</div><div class="tool-desc">Data Analysis & Search Engine</div></div><span class="tool-badge">Data</span></div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'tools-win')"></div>
+</div>
+
+<!-- ── FILE MANAGER ── -->
+<div class="window" id="files-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'files-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('files-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('files-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('files-win')"></button>
+    </div>
+    <span class="win-title-text">📁 Files — /home/0xdragon</span>
+  </div>
+  <div class="win-body">
+    <div class="files-body">
+      <div class="files-sidebar">
+        <div class="files-sidebar-item active">🏠 Home</div>
+        <div class="files-sidebar-item">📄 Reports</div>
+        <div class="files-sidebar-item">🔧 Scripts</div>
+        <div class="files-sidebar-item">🚩 CTF</div>
+        <div class="files-sidebar-item">🔐 Certs</div>
+        <div class="files-sidebar-item">🗑️ Trash</div>
+      </div>
+      <div class="files-main">
+        <div class="files-grid">
+          <div class="file-item"><div class="f-ico">📁</div><div class="f-name">ctf_writeups</div></div>
+          <div class="file-item"><div class="f-ico">📁</div><div class="f-name">tools</div></div>
+          <div class="file-item"><div class="f-ico">📁</div><div class="f-name">reports</div></div>
+          <div class="file-item"><div class="f-ico">📁</div><div class="f-name">scripts</div></div>
+          <div class="file-item"><div class="f-ico">📄</div><div class="f-name">README.md</div></div>
+          <div class="file-item"><div class="f-ico">🐍</div><div class="f-name">scanner.py</div></div>
+          <div class="file-item"><div class="f-ico">🔐</div><div class="f-name">eJPT.pdf</div></div>
+          <div class="file-item"><div class="f-ico">📝</div><div class="f-name">notes.txt</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'files-win')"></div>
+</div>
+
+<!-- TASKBAR -->
+<div id="taskbar">
+  <div id="kali-menu-btn" onclick="toggleStartMenu()">
+    <span class="dragon">🐍</span> Kali
+  </div>
+  <div class="taskbar-sep"></div>
+  <div id="taskbar-tasks"></div>
+  <div class="taskbar-right">
+    <div class="tb-status">
+      <div class="status-dot dot-green"></div>
+      <span style="font-size:10px;color:#3a6b8a">VPN</span>
+      <div class="status-dot dot-blue"></div>
+      <span style="font-size:10px;color:#3a6b8a">NET</span>
+    </div>
+    <div class="tb-clock" id="clock">00:00:00</div>
+  </div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="ctx-menu">
+  <div class="ctx-item" onclick="openWindow('terminal-win'); addTask('terminal-win'); hideCtx()"><span class="ctx-ico">🖥️</span> Open Terminal</div>
+  <div class="ctx-item" onclick="openWindow('about-win'); addTask('about-win'); hideCtx()"><span class="ctx-ico">🐍</span> About Santi</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="openWindow('ctf-win'); addTask('ctf-win'); hideCtx()"><span class="ctx-ico">🚀</span> Progetti</div>
+  <div class="ctx-item" onclick="openWindow('tools-win'); addTask('tools-win'); hideCtx()"><span class="ctx-ico">🔧</span> Arsenal</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="hideCtx()"><span class="ctx-ico">🔄</span> Refresh</div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div id="notif-container"></div>
+
+<script>
+// ── BOOT SEQUENCE ──
+const bootMessages = [
+  { t: 0,   txt: '[  OK  ] Kernel caricato — santivadala-OS 6.6.4-cyber', cls: '' },
+  { t: 350, txt: '[  OK  ] Interfaccia di rete attiva...', cls: '' },
+  { t: 600, txt: '[  OK  ] Firewall e IDS avviati.', cls: '' },
+  { t: 900, txt: '[ WARN ] Connessione anonimizzata tramite proxy chain.', cls: 'boot-warn' },
+  { t: 1200, txt: '[  OK  ] Sessione sicura stabilita.', cls: '' },
+  { t: 1450, txt: '[  OK  ] Moduli OSINT caricati.', cls: '' },
+  { t: 1650, txt: '[  OK  ] Python 3.12 environment attivo.', cls: '' },
+  { t: 1850, txt: '[  OK  ] Portfolio environment pronto.', cls: 'boot-ok' },
+];
+
+// Boot screen style patch
+const bStyle = document.createElement('style');
+bStyle.textContent = `
+  .boot-ok { color: #39ff14 !important; }
+  .boot-warn { color: #ffcc00 !important; }
+`;
+document.head.appendChild(bStyle);
+
+function runBoot() {
+  const log = document.getElementById('boot-log');
+  const bar = document.getElementById('boot-bar');
+  bootMessages.forEach((m, i) => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = m.cls || '';
+      d.textContent = m.txt;
+      log.appendChild(d);
+      bar.style.width = ((i + 1) / bootMessages.length * 100) + '%';
+    }, m.t);
+  });
+  setTimeout(async () => {
+    // Glitch "ACCESSO AUTORIZZATO"
+    const gl = document.createElement('div');
+    gl.style.cssText = 'color:#ffcc00;font-weight:bold;margin-top:8px;';
+    log.appendChild(gl);
+    const glitchChars = '█▓▒░▄▀■□▪';
+    const target = '██ ACCESSO AUTORIZZATO ██';
+    for (let iter = 0; iter < 6; iter++) {
+      gl.textContent = target.split('').map(c => c === ' ' ? ' ' : glitchChars[Math.floor(Math.random() * glitchChars.length)]).join('');
+      await sleep(70);
+    }
+    gl.textContent = target;
+
+    await sleep(400);
+    document.getElementById('boot-screen').style.transition = 'opacity 0.6s';
+    document.getElementById('boot-screen').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('boot-screen').style.display = 'none';
+      startDesktop();
+    }, 600);
+  }, 2200);
+}
+
+function startDesktop() {
+  // Auto-open terminal & about
+  openWindow('terminal-win'); addTask('terminal-win');
+  setTimeout(() => { openWindow('about-win'); addTask('about-win'); }, 300);
+  printBanner();
+  showNotif('🐉 Kali Linux', 'SOC Portfolio loaded. Type "help" in terminal.');
+}
+
+// ── CLOCK ──
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ── DRAG ──
+let dragging = null, dragOX = 0, dragOY = 0;
+function startDrag(e, id) {
+  if (e.target.classList.contains('win-btn')) return;
+  focusWindow(id);
+  const el = document.getElementById(id);
+  const r = el.getBoundingClientRect();
+  dragging = id; dragOX = e.clientX - r.left; dragOY = e.clientY - r.top;
+  e.preventDefault();
+}
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const el = document.getElementById(dragging);
+  const dw = window.innerWidth, dh = window.innerHeight - 38;
+  let x = e.clientX - dragOX, y = e.clientY - dragOY;
+  x = Math.max(0, Math.min(x, dw - el.offsetWidth));
+  y = Math.max(0, Math.min(y, dh - el.offsetHeight));
+  el.style.left = x + 'px'; el.style.top = y + 'px';
+});
+document.addEventListener('mouseup', () => { dragging = null; });
+
+// ── RESIZE ──
+let resizing = null, resOX = 0, resOY = 0, resW0 = 0, resH0 = 0;
+function startResize(e, id) {
+  e.stopPropagation(); e.preventDefault();
+  const el = document.getElementById(id);
+  resizing = id; resOX = e.clientX; resOY = e.clientY;
+  resW0 = el.offsetWidth; resH0 = el.offsetHeight;
+}
+document.addEventListener('mousemove', e => {
+  if (!resizing) return;
+  const el = document.getElementById(resizing);
+  el.style.width = Math.max(300, resW0 + e.clientX - resOX) + 'px';
+  el.style.height = Math.max(200, resH0 + e.clientY - resOY) + 'px';
+});
+document.addEventListener('mouseup', () => { resizing = null; });
+
+// ── WINDOW MANAGEMENT ──
+let zTop = 200;
+function openWindow(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'flex';
+  el.classList.remove('minimized');
+  focusWindow(id);
+}
+function closeWindow(id) {
+  document.getElementById(id).style.display = 'none';
+  removeTask(id);
+}
+function minimizeWindow(id) {
+  document.getElementById(id).classList.add('minimized');
+  const tb = document.querySelector(`.tb-task[data-win="${id}"]`);
+  if (tb) tb.classList.remove('active');
+}
+function maximizeWindow(id) {
+  const el = document.getElementById(id);
+  if (el._max) {
+    el.style.left = el._ox; el.style.top = el._oy;
+    el.style.width = el._ow; el.style.height = el._oh;
+    el._max = false;
+  } else {
+    el._ox = el.style.left; el._oy = el.style.top;
+    el._ow = el.style.width; el._oh = el.style.height;
+    el.style.left = '0'; el.style.top = '0';
+    el.style.width = '100vw'; el.style.height = `calc(100vh - 38px)`;
+    el._max = true;
+  }
+}
+function focusWindow(id) {
+  document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
+  const el = document.getElementById(id);
+  el.classList.add('focused');
+  el.style.zIndex = ++zTop;
+  document.querySelectorAll('.tb-task').forEach(t => t.classList.remove('active'));
+  const tb = document.querySelector(`.tb-task[data-win="${id}"]`);
+  if (tb) tb.classList.add('active');
+}
+
+// ── TASKBAR TASKS ──
+const taskInfo = {
+  'terminal-win': { ico: '🖥️', name: 'Terminal' },
+  'about-win': { ico: '🐍', name: 'About Me' },
+  'ctf-win': { ico: '🚀', name: 'Progetti' },
+  'tools-win': { ico: '🔧', name: 'Arsenal' },
+  'files-win': { ico: '📁', name: 'Files' },
+};
+const tasksContainer = document.getElementById('taskbar-tasks');
+
+function addTask(id) {
+  if (document.querySelector(`.tb-task[data-win="${id}"]`)) return;
+  const info = taskInfo[id];
+  const btn = document.createElement('div');
+  btn.className = 'tb-task active'; btn.dataset.win = id;
+  btn.innerHTML = `<span class="t-ico">${info.ico}</span> ${info.name}`;
+  btn.onclick = () => {
+    const el = document.getElementById(id);
+    if (el.classList.contains('minimized')) { openWindow(id); }
+    else if (el.classList.contains('focused')) { minimizeWindow(id); }
+    else { focusWindow(id); }
+  };
+  tasksContainer.appendChild(btn);
+}
+function removeTask(id) {
+  const tb = document.querySelector(`.tb-task[data-win="${id}"]`);
+  if (tb) tb.remove();
+}
+
+// ── CONTEXT MENU ──
+function showCtxMenu(e) {
+  e.preventDefault();
+  const m = document.getElementById('ctx-menu');
+  m.style.display = 'block';
+  m.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+  m.style.top = Math.min(e.clientY, window.innerHeight - 200) + 'px';
+}
+function hideCtx() { document.getElementById('ctx-menu').style.display = 'none'; }
+document.addEventListener('click', hideCtx);
+
+// ── NOTIFICATIONS ──
+function showNotif(title, msg) {
+  const c = document.getElementById('notif-container');
+  const n = document.createElement('div');
+  n.className = 'notif';
+  n.innerHTML = `<div class="notif-title">${title}</div>${msg}`;
+  c.appendChild(n);
+  setTimeout(() => { n.classList.add('out'); setTimeout(() => n.remove(), 300); }, 4000);
+}
+
+// ── TERMINAL ──
+const output = document.getElementById('term-out');
+let cmdHistory = [], histIdx = -1;
+let currentPath = '~';
+
+const fs = {
+  '~': ['Desktop', 'Documents', 'progetti', 'scripts', 'tools', 'osint', 'README.md', '.bashrc', '.zshrc'],
+  '~/Desktop': ['portfolio.html', 'notes.txt', 'targets.txt'],
+  '~/progetti': ['OsintBot', 'DarkScraper', 'ReconShell'],
+  '~/scripts': ['osintbot.py', 'darkscraper.py', 'reconshell.sh', 'phish_analyzer.py'],
+  '~/tools': ['nmap', 'maltego', 'shodan-cli', 'recon-ng'],
+  '~/osint': ['maltego_graphs', 'shodan_results', 'reports'],
+};
+
+const commands = {
+  help: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '╔════════════════════════════════════════╗' },
+    { cls: 't-warn', t: '║          COMANDI DISPONIBILI           ║' },
+    { cls: 't-warn', t: '╚════════════════════════════════════════╝' },
+    { cls: 'T', t: '  about      → Profilo & bio' },
+    { cls: 'T', t: '  skills     → Stack tecnico completo' },
+    { cls: 'T', t: '  contact    → Link e contatti' },
+    { cls: 'T', t: '  projects   → Progetti in evidenza' },
+    { cls: 'T', t: '  whoami     → Chi sono in 1 riga' },
+    { cls: 'T', t: '  ls [dir]   → Lista directory' },
+    { cls: 'T', t: '  cd <dir>   → Cambia directory' },
+    { cls: 'T', t: '  cat <file> → Mostra file' },
+    { cls: 'T', t: '  pwd        → Directory corrente' },
+    { cls: 'T', t: '  uname -a   → Info sistema' },
+    { cls: 'T', t: '  ifconfig   → Interfacce di rete' },
+    { cls: 'T', t: '  nmap <ip>  → Simula port scan' },
+    { cls: 'T', t: '  open <app> → Apri finestra (about/projects/tools/files)' },
+    { cls: 'T', t: '  clear      → Pulisci il terminale' },
+    { cls: 'T', t: '  matrix     → 👀' },
+    { cls: '', t: '' },
+  ],
+
+  whoami: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '  santivadala — Python Dev · OSINT · Linux Nerd 🐍' },
+    { cls: '', t: '' },
+  ],
+
+  about: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '┌─[ ABOUT ]───────────────────────────────' },
+    { cls: 't-warn', t: '│' },
+    { cls: 'T', t: '│  Nome   :  Santi Vadala' },
+    { cls: 'T', t: '│  Ruolo  :  Python Developer &' },
+    { cls: 'T', t: '│            Cyber Intelligence Specialist' },
+    { cls: 'T', t: '│  Base   :  Italia 🇮🇹' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-comment', t: '│  Appassionato di sicurezza offensiva,' },
+    { cls: 't-comment', t: '│  automazione intelligente e OSINT.' },
+    { cls: 't-comment', t: '│  Trasformo dati in conoscenza,' },
+    { cls: 't-comment', t: '│  e codice in potere.' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-warn', t: '└─────────────────────────────────────────' },
+    { cls: '', t: '' },
+  ],
+
+  skills: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '┌─[ SKILLS & STACK ]──────────────────────' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  ◈ LINGUAGGI' },
+    { cls: 'T', t: '│    Python ████████████ 95%' },
+    { cls: 'T', t: '│    Bash   █████████░░  78%' },
+    { cls: 'T', t: '│    SQL    ████████░░░  72%' },
+    { cls: 'T', t: '│    JS     ██████░░░░░  55%' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  ◈ CYBER & INTELLIGENCE' },
+    { cls: 'T', t: '│    OSINT · Maltego · Shodan' },
+    { cls: 'T', t: '│    Nmap · Wireshark · Metasploit' },
+    { cls: 'T', t: '│    Social Engineering · Recon-ng' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  ◈ SISTEMI & DEVOPS' },
+    { cls: 'T', t: '│    Linux (Kali, Ubuntu, Arch)' },
+    { cls: 'T', t: '│    Docker · Git · Proxmox' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  ◈ PYTHON LIBS' },
+    { cls: 'T', t: '│    Scrapy · Selenium · Requests' },
+    { cls: 'T', t: '│    Pandas · FastAPI · Pwntools' },
+    { cls: 't-warn', t: '└─────────────────────────────────────────' },
+    { cls: '', t: '' },
+  ],
+
+  contact: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '┌─[ CONTATTI ]────────────────────────────' },
+    { cls: 't-warn', t: '│' },
+    { cls: 'T', t: '│  🔗 LinkedIn  →  <a href="https://linkedin.com/in/santivadaladev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">linkedin.com/in/santivadaladev</a>' },
+    { cls: 'T', t: '│  🐙 GitHub    →  <a href="https://github.com/santivadaladev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">github.com/santivadaladev</a>' },
+    { cls: 'T', t: '│  🌐 Web       →  <a href="https://santivadala.it" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">santivadala.it</a>' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  DM aperte. Collaborazioni welcome. 🐍' },
+    { cls: 't-warn', t: '└─────────────────────────────────────────' },
+    { cls: '', t: '' },
+  ],
+
+  projects: () => [
+    { cls: '', t: '' },
+    { cls: 't-warn', t: '┌─[ PROGETTI ]────────────────────────────' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  [01] OsintBot' },
+    { cls: 'T', t: '│       Framework OSINT automatizzato in Python' },
+    { cls: 't-comment', t: '│       → Raccolta dati · API aggregation' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  [02] DarkScraper' },
+    { cls: 'T', t: '│       Web scraper etico per cyber intelligence' },
+    { cls: 't-comment', t: '│       → Scrapy · Tor · Elasticsearch' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-success', t: '│  [03] ReconShell' },
+    { cls: 'T', t: '│       Toolkit CLI per recon passiva' },
+    { cls: 't-comment', t: '│       → Bash + Python · Shodan API' },
+    { cls: 't-warn', t: '│' },
+    { cls: 't-warn', t: '│  Vedi tutti → <a href="https://github.com/santivadaladev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">github.com/santivadaladev</a>' },
+    { cls: 't-warn', t: '└─────────────────────────────────────────' },
+    { cls: '', t: '' },
+  ],
+
+  pwd: () => [{ cls: 'T', t: '/home/santi/' + currentPath.replace('~', '') }],
+
+  uname: (args) => args.includes('-a') ? [
+    { cls: 'T', t: 'Linux kali 6.6.9-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.6.9-1kali1 (2024-01-08) x86_64 GNU/Linux' }
+  ] : [{ cls: 'T', t: 'Linux' }],
+
+  ifconfig: () => [
+    { cls: 't-info', t: 'eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500' },
+    { cls: 'T', t: '        inet 192.168.1.88  netmask 255.255.255.0  broadcast 192.168.1.255' },
+    { cls: 'T', t: '        ether ca:fe:ba:be:13:37  txqueuelen 1000' },
+    { cls: '', t: '' },
+    { cls: 't-warn', t: 'tun0: flags=4305<UP,POINTOPOINT,RUNNING,NOARP,MULTICAST>  mtu 1500' },
+    { cls: 't-success', t: '        inet 10.10.14.88  netmask 255.255.254.0' },
+    { cls: 't-success', t: '        [VPN ACTIVE — Proxy Chain Anonimizzata ✓]' },
+    { cls: '', t: '' },
+    { cls: 'T', t: 'lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536' },
+    { cls: 'T', t: '        inet 127.0.0.1  netmask 255.0.0.0' },
+  ],
+
+  clear: () => { output.innerHTML = ''; return []; },
+
+  open: (args) => {
+    const app = args[0];
+    const map = { 'about': 'about-win', 'projects': 'ctf-win', 'tools': 'tools-win', 'files': 'files-win', 'terminal': 'terminal-win' };
+    if (map[app]) { openWindow(map[app]); addTask(map[app]); return [{ cls: 't-success', t: `Opening ${app}...` }]; }
+    return [{ cls: 't-error', t: `open: app sconosciuta '${app}'. Prova: about, projects, tools, files` }];
+  },
+
+  ls: (args) => {
+    const dir = args[0] ? (currentPath + '/' + args[0]).replace('~/', '~/') : currentPath;
+    const contents = fs[dir] || fs['~'];
+    return contents.map(f => ({ cls: f.includes('.') ? 't-info' : 't-success', t: '  ' + f }));
+  },
+
+  cd: (args) => {
+    const d = args[0] || '~';
+    if (d === '..' || d === '-') { currentPath = '~'; }
+    else { currentPath = d.startsWith('~') ? d : `~/${d}`; }
+    document.getElementById('term-path').textContent = currentPath;
+    return [];
+  },
+
+  cat: (args) => {
+    const f = args[0];
+    const files = {
+      'README.md': [
+        '# Santi Vadala — Portfolio',
+        '',
+        'Python Developer & Cyber Intelligence Specialist',
+        '',
+        '> OSINT · Automazione · Sicurezza Offensiva',
+        '> "Trasformo dati in conoscenza, e codice in potere."',
+        '',
+        'Web: santivadala.it',
+        'GitHub: github.com/santivadaladev',
+      ],
+      '.bashrc': [
+        '# ~/.bashrc — santi@kali',
+        'export EDITOR=vim',
+        'alias ll="ls -la --color=auto"',
+        'alias gs="git status"',
+        'alias scan="nmap -sC -sV -oN scan.txt"',
+        'alias osint="python3 ~/scripts/osintbot.py"',
+        'alias recon="bash ~/scripts/reconshell.sh"',
+        'source ~/.oh-my-zsh/themes/agnoster.zsh-theme',
+      ],
+      '.zshrc': [
+        '# ~/.zshrc',
+        'export ZSH="$HOME/.oh-my-zsh"',
+        'ZSH_THEME="agnoster"',
+        'plugins=(git python docker kubectl)',
+        'source $ZSH/oh-my-zsh.sh',
+      ],
+    };
+    if (files[f]) return files[f].map(l => ({ cls: 'T', t: l }));
+    return [{ cls: 't-error', t: `cat: ${f}: File o directory non trovata` }];
+  },
+
+  nmap: (args) => {
+    const t = args[0] || '10.10.10.1';
+    return [
+      { cls: 't-info', t: `Starting Nmap 7.94 ( https://nmap.org )` },
+      { cls: 'T', t: `Nmap scan report for ${t}` },
+      { cls: 'T', t: 'Host is up (0.037s latency).' },
+      { cls: '', t: '' },
+      { cls: 'T', t: 'PORT     STATE SERVICE    VERSION' },
+      { cls: 't-warn', t: '22/tcp   open  ssh        OpenSSH 8.9p1' },
+      { cls: 't-warn', t: '80/tcp   open  http       Apache httpd 2.4.52' },
+      { cls: 't-error', t: '443/tcp  open  ssl/https  nginx 1.24.0' },
+      { cls: 't-warn', t: '8080/tcp open  http-proxy squid/5.7' },
+      { cls: '', t: '' },
+      { cls: 't-success', t: 'Nmap done: 1 IP address (1 host up) scanned in 2.71s' },
+    ];
+  },
+
+  matrix: () => {
+    runMatrix();
+    return [{ cls: 't-success', t: 'Entering the Matrix... (click per uscire)' }];
+  },
+};
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function typeText(text, cls) {
+  const div = document.createElement('div');
+  div.className = 't-line' + (cls ? ' ' + cls : '');
+  output.appendChild(div);
+  for (let i = 0; i < text.length; i++) {
+    div.textContent += text[i];
+    output.scrollTop = output.scrollHeight;
+    await sleep(28 + Math.random() * 18);
+  }
+}
+
+async function glitchText(text, cls) {
+  const glitchChars = '█▓▒░▄▀■□▪▫◆◇';
+  const div = document.createElement('div');
+  div.className = 't-line' + (cls ? ' ' + cls : '');
+  output.appendChild(div);
+  for (let iter = 0; iter < 6; iter++) {
+    div.textContent = text.split('').map(c => c === ' ' ? ' ' : glitchChars[Math.floor(Math.random() * glitchChars.length)]).join('');
+    await sleep(60);
+  }
+  div.textContent = text;
+  output.scrollTop = output.scrollHeight;
+}
+
+function printBanner() {
+  const lines = [
+    { cls: 't-warn', t: '  ███████╗ █████╗ ███╗   ██╗████████╗██╗' },
+    { cls: 't-warn', t: '  ██╔════╝██╔══██╗████╗  ██║╚══██╔══╝██║' },
+    { cls: 't-warn', t: '  ███████╗███████║██╔██╗ ██║   ██║   ██║' },
+    { cls: 't-warn', t: '  ╚════██║██╔══██║██║╚██╗██║   ██║   ██║' },
+    { cls: 't-warn', t: '  ███████║██║  ██║██║ ╚████║   ██║   ██║' },
+    { cls: 't-warn', t: '  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝' },
+    { cls: '', t: '' },
+    { cls: 't-info', t: '  Santi Vadala — Python Dev & Cyber Intelligence' },
+    { cls: 't-comment', t: '  Digita "help" per i comandi disponibili.' },
+    { cls: '', t: '' },
+  ];
+  lines.forEach(l => appendLine(l));
+}
+
+function appendLine({ cls, t }) {
+  const div = document.createElement('div');
+  div.className = 't-line';
+  if (cls) div.classList.add(cls);
+  div.innerHTML = t || '&nbsp;';
+  output.appendChild(div);
+  output.scrollTop = output.scrollHeight;
+}
+
+function appendPromptLine(cmd) {
+  const div = document.createElement('div');
+  div.className = 't-line';
+  div.innerHTML = `<span class="t-prompt"><span class="t-user">santi</span><span style="color:#7ab3d4">@</span><span class="t-host">kali</span><span style="color:#7ab3d4">:</span><span class="t-path">${currentPath}</span><span class="t-dollar"> $</span></span>&nbsp;<span class="t-cmd">${cmd}</span>`;
+  output.appendChild(div);
+}
+
+function handleTermInput(e) {
+  const inp = document.getElementById('terminal-input');
+  if (e.key === 'Enter') {
+    const raw = inp.value.trim();
+    inp.value = '';
+    if (!raw) return;
+    cmdHistory.unshift(raw); histIdx = -1;
+    appendPromptLine(raw);
+    const parts = raw.split(' ');
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+    if (commands[cmd]) {
+      const result = commands[cmd](args);
+      if (result) result.forEach(l => appendLine(l));
+    } else {
+      appendLine({ cls: 't-error', t: `bash: ${cmd}: command not found` });
+      appendLine({ cls: 't-comment', t: `Did you mean: help` });
+    }
+    appendLine({ cls: '' });
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (histIdx < cmdHistory.length - 1) { histIdx++; inp.value = cmdHistory[histIdx]; }
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (histIdx > 0) { histIdx--; inp.value = cmdHistory[histIdx]; }
+    else { histIdx = -1; inp.value = ''; }
+  } else if (e.key === 'Tab') {
+    e.preventDefault();
+    const partial = inp.value;
+    const match = Object.keys(commands).find(c => c.startsWith(partial));
+    if (match) inp.value = match;
+  }
+}
+
+// Click terminal to focus input
+document.getElementById('terminal-win').addEventListener('click', () => {
+  document.getElementById('terminal-input').focus();
+});
+
+// ── MATRIX EFFECT ──
+function runMatrix() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;z-index:99990;cursor:pointer;';
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const cols = Math.floor(canvas.width / 14);
+  const drops = Array(cols).fill(0);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ01アイABCDEF0189';
+  let raf;
+  function draw() {
+    ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#39ff14'; ctx.font = '13px Share Tech Mono';
+    drops.forEach((y, i) => {
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(ch, i * 14, y * 14);
+      if (y * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    });
+    raf = requestAnimationFrame(draw);
+  }
+  draw();
+  canvas.onclick = () => { cancelAnimationFrame(raf); canvas.remove(); };
+}
+
+// ── START ──
+runBoot();
+
+// Focus terminal input on click anywhere in terminal
+document.addEventListener('keydown', (e) => {
+  if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+    const inp = document.getElementById('terminal-input');
+    const term = document.getElementById('terminal-win');
+    if (term.style.display !== 'none' && !term.classList.contains('minimized')) {
+      inp.focus();
+    }
+  }
+});
+</script>
+</body>
+</html>
