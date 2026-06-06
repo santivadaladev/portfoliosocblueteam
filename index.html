@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Santi Vadala // Python Dev & Cyber Intelligence</title>
+
+<meta name="description" content="Portfolio di Santi Vadalà: Python Developer ed esperto in Cyber Intelligence, Automazione e OSINT. Esplora il mio desktop interattivo.">
+<meta name="keywords" content="Santi Vadala, Python Developer, Cyber Intelligence, OSINT, Automazione, Ethical Hacking Italia, Portfolio Linux">
+<meta property="og:title" content="Santi Vadalà | Portfolio Interattivo">
+<meta property="og:description" content="Esplora il mio workspace in stile Linux. Progetti Python, tool di Cyber Intelligence e automazione.">
+<meta property="og:image" content="https://www.santivadala.it/un-anteprima-del-tuo-sito.jpg">
+<meta property="og:url" content="https://www.santivadala.it">
+
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -36,17 +44,14 @@
     cursor: default;
   }
 
-  /* ── WALLPAPER ── */
-  #wallpaper {
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse at 80% 50%, rgba(91,163,232,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse at 10% 80%, rgba(0,60,120,0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 10%, rgba(30,77,123,0.15) 0%, transparent 50%),
-      linear-gradient(135deg, #0a0f16 0%, #0d1a2e 40%, #0e2040 70%, #0a1520 100%);
-    z-index: 0;
-  }
-
+/* ── WALLPAPER ── */
+#wallpaper {
+  position: fixed; 
+  inset: 0;
+  /* Rimuovendo il colore nero, il background sarà trasparente oltre i confini dell'immagine */
+  background: url('../image/volpe.png') center center / auto no-repeat;
+  z-index: 0;
+}
   /* Cubes SVG background effect */
   #wallpaper::before {
     content: '';
@@ -484,6 +489,231 @@
     background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
   }
 
+  /* ── SIEM WINDOW ── */
+  #siem-win { width: 860px; height: 560px; top: 60px; left: 100px; }
+
+  .siem-body {
+    display: flex; flex-direction: column; flex: 1; overflow: hidden;
+    background: rgba(4, 9, 16, 0.98);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .siem-topbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 7px 14px;
+    background: rgba(10, 20, 36, 0.95);
+    border-bottom: 1px solid var(--kali-border);
+    flex-shrink: 0;
+  }
+  .siem-logo {
+    font-family: 'Orbitron', monospace; font-size: 13px;
+    color: var(--kali-cyan); font-weight: 700; letter-spacing: 2px;
+  }
+  .siem-tabs {
+    display: flex; gap: 2px; margin-left: 8px;
+  }
+  .siem-tab {
+    padding: 3px 12px; border-radius: 3px; font-size: 10px;
+    cursor: pointer; color: var(--text-muted);
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .siem-tab.active {
+    background: rgba(91,163,232,0.15); border-color: var(--kali-border);
+    color: var(--kali-cyan);
+  }
+  .siem-tab:hover:not(.active) { background: rgba(91,163,232,0.07); color: var(--text-primary); }
+
+  .siem-status-pills { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .siem-pill {
+    padding: 2px 10px; border-radius: 10px; font-size: 10px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .pill-live {
+    background: rgba(57,255,20,0.08); border: 1px solid rgba(57,255,20,0.25);
+    color: var(--terminal-green);
+  }
+  .pill-live::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--terminal-green);
+    animation: blink-dot 1.2s infinite;
+  }
+  .pill-hosts {
+    background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+    color: var(--kali-cyan);
+  }
+  .pill-alerts {
+    background: rgba(255,68,68,0.1); border: 1px solid rgba(255,68,68,0.3);
+    color: var(--terminal-red);
+  }
+  @keyframes blink-dot { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .siem-main {
+    display: flex; flex: 1; overflow: hidden;
+  }
+
+  /* Left panel: KPI cards */
+  .siem-sidebar {
+    width: 200px; flex-shrink: 0;
+    border-right: 1px solid var(--kali-border);
+    display: flex; flex-direction: column; gap: 0;
+    overflow-y: auto; padding: 10px 8px;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+
+  .kpi-card {
+    padding: 10px 12px; border-radius: 5px; margin-bottom: 7px;
+    background: rgba(14,28,52,0.6); border: 1px solid var(--kali-border);
+  }
+  .kpi-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+  .kpi-value {
+    font-family: 'Orbitron', monospace; font-size: 22px;
+    margin-top: 3px; color: var(--kali-cyan);
+  }
+  .kpi-value.red { color: var(--terminal-red); }
+  .kpi-value.yellow { color: var(--terminal-yellow); }
+  .kpi-value.green { color: var(--terminal-green); }
+  .kpi-sub { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+
+  .siem-mini-chart {
+    height: 28px; display: flex; align-items: flex-end; gap: 2px; margin-top: 6px;
+  }
+  .siem-mini-bar {
+    flex: 1; border-radius: 2px 2px 0 0;
+    background: rgba(91,163,232,0.25);
+    transition: height 0.5s;
+  }
+
+  /* Severity legend */
+  .sev-legend { padding: 8px 12px; }
+  .sev-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .sev-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sev-name { font-size: 10px; color: var(--text-muted); flex: 1; }
+  .sev-count { font-size: 10px; color: var(--text-primary); font-weight: bold; }
+
+  /* Center: Alert feed */
+  .siem-center { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .siem-feed-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(91,163,232,0.1);
+    flex-shrink: 0;
+  }
+  .feed-title { font-size: 11px; color: var(--kali-cyan); font-family: 'Orbitron', monospace; letter-spacing: 1px; }
+  .feed-filter-btns { display: flex; gap: 4px; margin-left: auto; }
+  .feed-filter {
+    padding: 2px 8px; border-radius: 3px; font-size: 9px;
+    cursor: pointer; border: 1px solid transparent;
+    color: var(--text-dim); transition: all 0.15s;
+  }
+  .feed-filter.active, .feed-filter:hover { border-color: var(--kali-border); color: var(--text-primary); background: rgba(91,163,232,0.08); }
+  .feed-filter.f-critical.active { border-color: rgba(255,68,68,0.4); color: var(--terminal-red); background: rgba(255,68,68,0.07); }
+  .feed-filter.f-high.active { border-color: rgba(255,140,0,0.4); color: #ff8c00; background: rgba(255,140,0,0.07); }
+  .feed-filter.f-medium.active { border-color: rgba(255,204,0,0.4); color: var(--terminal-yellow); background: rgba(255,204,0,0.07); }
+  .feed-filter.f-info.active { border-color: rgba(0,212,255,0.4); color: var(--kali-cyan); background: rgba(0,212,255,0.07); }
+
+  .alert-feed {
+    flex: 1; overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+  .alert-feed::-webkit-scrollbar { width: 4px; }
+  .alert-feed::-webkit-scrollbar-thumb { background: var(--kali-blue); border-radius: 2px; }
+
+  .alert-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(91,163,232,0.05);
+    cursor: pointer; transition: background 0.15s;
+    animation: alert-slide-in 0.3s ease;
+  }
+  .alert-row:hover { background: rgba(91,163,232,0.06); }
+  .alert-row.new-alert { animation: alert-flash 0.8s ease; }
+  @keyframes alert-slide-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes alert-flash {
+    0% { background: rgba(255,68,68,0.15); }
+    100% { background: transparent; }
+  }
+
+  .alert-sev {
+    width: 56px; flex-shrink: 0; text-align: center;
+    padding: 2px 0; border-radius: 3px; font-size: 9px; font-weight: bold;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px;
+  }
+  .sev-critical { background: rgba(255,68,68,0.15); color: var(--terminal-red); border: 1px solid rgba(255,68,68,0.3); }
+  .sev-high { background: rgba(255,140,0,0.12); color: #ff8c00; border: 1px solid rgba(255,140,0,0.25); }
+  .sev-medium { background: rgba(255,204,0,0.1); color: var(--terminal-yellow); border: 1px solid rgba(255,204,0,0.2); }
+  .sev-info { background: rgba(0,212,255,0.08); color: var(--kali-cyan); border: 1px solid rgba(0,212,255,0.15); }
+  .sev-low { background: rgba(57,255,20,0.07); color: var(--terminal-green); border: 1px solid rgba(57,255,20,0.15); }
+
+  .alert-content { flex: 1; min-width: 0; }
+  .alert-title { font-size: 11px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .alert-meta { font-size: 9px; color: var(--text-dim); margin-top: 2px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .alert-meta span { display: flex; align-items: center; gap: 3px; }
+
+  .alert-time { font-size: 9px; color: var(--text-dim); flex-shrink: 0; margin-top: 3px; white-space: nowrap; }
+
+  /* Right panel: detail + map */
+  .siem-right {
+    width: 210px; flex-shrink: 0;
+    border-left: 1px solid var(--kali-border);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .siem-right-title {
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(91,163,232,0.1);
+    font-size: 9px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .siem-geo-map {
+    height: 100px; flex-shrink: 0; position: relative;
+    background: rgba(5,15,30,0.95);
+    border-bottom: 1px solid rgba(91,163,232,0.1);
+    overflow: hidden;
+  }
+  .geo-dot {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--terminal-red); transform: translate(-50%, -50%);
+    animation: geo-pulse 2s infinite;
+  }
+  @keyframes geo-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); }
+  }
+  .geo-line {
+    position: absolute; background: rgba(0,212,255,0.15); height: 1px; transform-origin: left center;
+  }
+
+  .siem-recent-list {
+    flex: 1; overflow-y: auto; padding: 6px 8px;
+    scrollbar-width: thin; scrollbar-color: var(--kali-blue) transparent;
+  }
+  .recent-item {
+    padding: 6px 8px; border-radius: 4px; margin-bottom: 4px;
+    background: rgba(14,28,52,0.5); border: 1px solid rgba(91,163,232,0.08);
+    font-size: 9px;
+  }
+  .recent-item .r-ip { color: var(--terminal-red); margin-bottom: 2px; }
+  .recent-item .r-action { color: var(--text-muted); }
+  .recent-item .r-time { color: var(--text-dim); margin-top: 2px; }
+
+  /* Bottom status bar */
+  .siem-statusbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 4px 12px;
+    background: rgba(8,16,28,0.95);
+    border-top: 1px solid var(--kali-border);
+    font-size: 9px; color: var(--text-dim);
+    flex-shrink: 0; letter-spacing: 0.5px;
+  }
+  .siem-statusbar span { display: flex; align-items: center; gap: 4px; }
+  .siem-statusbar .s-ok { color: var(--terminal-green); }
+  .siem-statusbar .s-warn { color: var(--terminal-yellow); }
+  .siem-statusbar .s-err { color: var(--terminal-red); }
+
   /* MOBILE RESPONSIVE IMPROVEMENTS */
   @media (max-width: 768px) {
     #terminal-win { width: calc(100vw - 20px); height: 60vh; top: 10px; left: 10px; }
@@ -533,6 +763,9 @@
     </div>
     <div class="desk-icon" ondblclick="openWindow('files-win'); addTask('files-win')">
       <div class="ico">📁</div><span>Files</span>
+    </div>
+    <div class="desk-icon" ondblclick="openWindow('siem-win'); addTask('siem-win')">
+      <div class="ico">🛡️</div><span>SIEM</span>
     </div>
   </div>
 </div>
@@ -598,7 +831,7 @@
 
       <div class="section-title">bio</div>
       <div style="font-size:11px;color:var(--text-muted);line-height:1.8;padding:8px 10px;background:rgba(91,163,232,0.04);border:1px solid rgba(91,163,232,0.1);border-radius:4px;margin-bottom:4px;">
-        Appassionato di sicurezza offensiva,<br>
+        Appassionato di sicurezza difensiva,<br>
         automazione intelligente e OSINT.<br>
         Trasformo dati in conoscenza,<br>
         e codice in potere. 🐍
@@ -610,12 +843,13 @@
       <div class="skill-row"><span class="skill-name">SQL</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div><span class="skill-pct">72%</span></div>
       <div class="skill-row"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div><span class="skill-pct">55%</span></div>
       <div class="skill-row"><span class="skill-name">OSINT / Recon</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div><span class="skill-pct">90%</span></div>
-      <div class="skill-row"><span class="skill-name">Web Pentesting</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div><span class="skill-pct">82%</span></div>
+      <div class="skill-row"><span class="skill-name">Incident Response</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div><span class="skill-pct">82%</span></div>
 
       <div class="section-title">contact</div>
       <div class="info-grid">
         <div class="info-item"><div class="lbl">GitHub</div><div class="val">github.com/santivadaladev</div></div>
         <div class="info-item"><div class="lbl">LinkedIn</div><div class="val">/in/santivadaladev</div></div>
+        <div class="info-item"><div class="lbl">TryHackMe</div><div class="val">tryhackme.com/p/santivadala.dev</div></div>
         <div class="info-item"><div class="lbl">Web</div><div class="val">santivadala.it</div></div>
         <div class="info-item"><div class="lbl">Status</div><div class="val" style="color:var(--terminal-green)">DM aperte ✓</div></div>
       </div>
@@ -734,6 +968,112 @@
   <div class="win-resize" onmousedown="startResize(event,'files-win')"></div>
 </div>
 
+<!-- ── SIEM WINDOW ── -->
+<div class="window" id="siem-win" style="display:none">
+  <div class="win-title" onmousedown="startDrag(event,'siem-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('siem-win')"></button>
+      <button class="win-btn minimize" onclick="minimizeWindow('siem-win')"></button>
+      <button class="win-btn maximize" onclick="maximizeWindow('siem-win')"></button>
+    </div>
+    <span class="win-title-text">🛡️ SIEM — Security Information & Event Management</span>
+  </div>
+  <div class="win-body">
+    <div class="siem-body">
+      <!-- Top bar -->
+      <div class="siem-topbar">
+        <div class="siem-logo">SOC·SIEM</div>
+        <div class="siem-tabs">
+          <div class="siem-tab active" onclick="siemTab(this,'alerts')">Alerts</div>
+          <div class="siem-tab" onclick="siemTab(this,'events')">Events</div>
+          <div class="siem-tab" onclick="siemTab(this,'threats')">Threats</div>
+        </div>
+        <div class="siem-status-pills">
+          <span class="siem-pill pill-live">LIVE</span>
+          <span class="siem-pill pill-hosts">🖥️ <span id="siem-hosts">24</span> hosts</span>
+          <span class="siem-pill pill-alerts">⚠️ <span id="siem-alert-count">0</span> alerts</span>
+        </div>
+      </div>
+
+      <div class="siem-main">
+        <!-- Left: KPI sidebar -->
+        <div class="siem-sidebar">
+          <div class="kpi-card">
+            <div class="kpi-label">Events / sec</div>
+            <div class="kpi-value green" id="kpi-eps">847</div>
+            <div class="kpi-sub">↑ 12% rispetto a ieri</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Alert attivi</div>
+            <div class="kpi-value red" id="kpi-active">0</div>
+            <div class="kpi-sub">ultimi 60 min</div>
+            <div class="siem-mini-chart" id="kpi-chart"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hosts monitorati</div>
+            <div class="kpi-value" id="kpi-hosts">24</div>
+            <div class="kpi-sub">4 in quarantena</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">False positive</div>
+            <div class="kpi-value yellow">3.2%</div>
+            <div class="kpi-sub">threshold: 5%</div>
+          </div>
+
+          <div style="margin-top:8px;margin-bottom:4px;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;padding:0 4px;">Severità</div>
+          <div class="sev-legend">
+            <div class="sev-row"><div class="sev-dot" style="background:#ff4444"></div><span class="sev-name">Critical</span><span class="sev-count" id="sev-c">0</span></div>
+            <div class="sev-row"><div class="sev-dot" style="background:#ff8c00"></div><span class="sev-name">High</span><span class="sev-count" id="sev-h">0</span></div>
+            <div class="sev-row"><div class="sev-dot" style="background:#ffcc00"></div><span class="sev-name">Medium</span><span class="sev-count" id="sev-m">0</span></div>
+            <div class="sev-row"><div class="sev-dot" style="background:#5ba3e8"></div><span class="sev-name">Low</span><span class="sev-count" id="sev-l">0</span></div>
+            <div class="sev-row"><div class="sev-dot" style="background:#00d4ff"></div><span class="sev-name">Info</span><span class="sev-count" id="sev-i">0</span></div>
+          </div>
+        </div>
+
+        <!-- Center: Alert feed -->
+        <div class="siem-center">
+          <div class="siem-feed-header">
+            <span class="feed-title">ALERT FEED</span>
+            <div class="feed-filter-btns">
+              <div class="feed-filter f-critical active" onclick="siemFilter(this,'critical')">CRIT</div>
+              <div class="feed-filter f-high active" onclick="siemFilter(this,'high')">HIGH</div>
+              <div class="feed-filter f-medium active" onclick="siemFilter(this,'medium')">MED</div>
+              <div class="feed-filter f-info active" onclick="siemFilter(this,'info')">INFO</div>
+              <div class="feed-filter" onclick="clearSiemAlerts()" style="color:var(--terminal-red);border-color:rgba(255,68,68,0.2)">CLR</div>
+            </div>
+          </div>
+          <div class="alert-feed" id="alert-feed"></div>
+        </div>
+
+        <!-- Right: geo + recent IPs -->
+        <div class="siem-right">
+          <div class="siem-right-title">Threat Map</div>
+          <div class="siem-geo-map" id="siem-geo">
+            <svg width="100%" height="100%" viewBox="0 0 210 100" style="opacity:0.25">
+              <!-- simplified world outline paths -->
+              <path d="M10,30 Q30,15 60,20 Q90,25 100,35 Q110,45 130,40 Q160,35 190,45 Q200,50 200,60 Q185,70 160,65 Q130,70 100,60 Q70,65 50,60 Q25,55 10,45 Z" fill="none" stroke="#5ba3e8" stroke-width="0.7"/>
+              <path d="M40,55 Q60,50 80,55 Q80,70 60,72 Q40,70 40,55Z" fill="none" stroke="#5ba3e8" stroke-width="0.7"/>
+              <path d="M110,55 Q135,52 150,58 Q152,68 135,70 Q115,68 110,55Z" fill="none" stroke="#5ba3e8" stroke-width="0.7"/>
+              <path d="M155,45 Q175,42 188,50 Q188,60 170,62 Q155,60 155,45Z" fill="none" stroke="#5ba3e8" stroke-width="0.7"/>
+            </svg>
+          </div>
+          <div class="siem-right-title" style="border-top:1px solid rgba(91,163,232,0.1)">Top Attackers</div>
+          <div class="siem-recent-list" id="siem-ip-list"></div>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="siem-statusbar">
+        <span class="s-ok">● Elasticsearch: OK</span>
+        <span class="s-ok">● Logstash: OK</span>
+        <span class="s-warn">⚡ Kibana: LAG 120ms</span>
+        <span style="margin-left:auto;color:var(--kali-cyan)" id="siem-uptime">Uptime: 00:00:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="win-resize" onmousedown="startResize(event,'siem-win')"></div>
+</div>
+
 <!-- TASKBAR -->
 <div id="taskbar">
   <div id="kali-menu-btn" onclick="toggleStartMenu()">
@@ -826,8 +1166,9 @@ function startDesktop() {
   // Auto-open terminal & about
   openWindow('terminal-win'); addTask('terminal-win');
   setTimeout(() => { openWindow('about-win'); addTask('about-win'); }, 300);
+  setTimeout(() => { openWindow('siem-win'); addTask('siem-win'); }, 5000);
   printBanner();
-  showNotif('🐉 Kali Linux', 'SOC Portfolio loaded. Type "help" in terminal.');
+  showNotif('🛡️ SIEM Online', 'Monitoraggio attivo — alert feed avviato.');
 }
 
 // ── CLOCK ──
@@ -923,6 +1264,7 @@ const taskInfo = {
   'ctf-win': { ico: '🚀', name: 'Progetti' },
   'tools-win': { ico: '🔧', name: 'Arsenal' },
   'files-win': { ico: '📁', name: 'Files' },
+  'siem-win': { ico: '🛡️', name: 'SIEM' },
 };
 const tasksContainer = document.getElementById('taskbar-tasks');
 
@@ -1006,7 +1348,7 @@ const commands = {
 
   whoami: () => [
     { cls: '', t: '' },
-    { cls: 't-warn', t: '  santivadala — Python Dev · OSINT · Linux Nerd 🐍' },
+    { cls: 't-warn', t: '  santivadala — Python Dev · OSINT · Linux  🐍' },
     { cls: '', t: '' },
   ],
 
@@ -1060,6 +1402,7 @@ const commands = {
     { cls: 't-warn', t: '│' },
     { cls: 'T', t: '│  🔗 LinkedIn  →  <a href="https://linkedin.com/in/santivadaladev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">linkedin.com/in/santivadaladev</a>' },
     { cls: 'T', t: '│  🐙 GitHub    →  <a href="https://github.com/santivadaladev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">github.com/santivadaladev</a>' },
+    { cls: 'T', t: '│  🛡️ TryHackMe   →  <a href="https://tryhackme.com/p/santivadala.dev" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">tryhackme.com/p/santivadala.dev</a>' },
     { cls: 'T', t: '│  🌐 Web       →  <a href="https://santivadala.it" target="_blank" style="color:#39ff14;text-decoration:underline;cursor:pointer;transition:all 0.2s">santivadala.it</a>' },
     { cls: 't-warn', t: '│' },
     { cls: 't-success', t: '│  DM aperte. Collaborazioni welcome. 🐍' },
@@ -1312,6 +1655,217 @@ function runMatrix() {
   canvas.onclick = () => { cancelAnimationFrame(raf); canvas.remove(); };
 }
 
+// ── SIEM ENGINE ──
+const siemAlerts = [];
+let siemAlertCount = 0;
+let siemUptime = 0;
+const siemFilters = new Set(['critical','high','medium','info','low']);
+const sevCounts = { critical:0, high:0, medium:0, low:0, info:0 };
+const siemIPs = {};
+
+const alertTemplates = [
+  { sev:'critical', title:'Brute Force SSH Detected', src:'185.220.101.47', dst:'10.0.0.5', port:'22', proto:'TCP', cat:'Authentication' },
+  { sev:'critical', title:'SQL Injection Attempt', src:'91.108.4.233', dst:'10.0.0.12', port:'443', proto:'HTTPS', cat:'Web Attack' },
+  { sev:'critical', title:'Ransomware Signature Match', src:'10.0.0.19', dst:'192.168.1.200', port:'445', proto:'SMB', cat:'Malware' },
+  { sev:'critical', title:'C2 Beacon Detected', src:'10.0.0.8', dst:'45.142.212.105', port:'8080', proto:'HTTP', cat:'C2 Comms' },
+  { sev:'high', title:'Port Scan — SYN Flood', src:'194.165.16.98', dst:'10.0.0.0/24', port:'*', proto:'TCP', cat:'Recon' },
+  { sev:'high', title:'Privilege Escalation Attempt', src:'10.0.0.14', dst:'10.0.0.1', port:'135', proto:'RPC', cat:'Lateral Movement' },
+  { sev:'high', title:'Exfiltration via DNS Tunneling', src:'10.0.0.22', dst:'8.8.8.8', port:'53', proto:'DNS', cat:'Exfiltration' },
+  { sev:'high', title:'Mimikatz Activity Detected', src:'10.0.0.11', dst:'LOCAL', port:'-', proto:'LOCAL', cat:'Credential Theft' },
+  { sev:'high', title:'RDP Brute Force — 500 attempts', src:'103.248.12.7', dst:'10.0.0.3', port:'3389', proto:'RDP', cat:'Authentication' },
+  { sev:'medium', title:'Failed Login — Admin Account', src:'10.0.0.33', dst:'10.0.0.1', port:'389', proto:'LDAP', cat:'Authentication' },
+  { sev:'medium', title:'Unusual Outbound Traffic Volume', src:'10.0.0.17', dst:'216.58.209.46', port:'443', proto:'TLS', cat:'Anomaly' },
+  { sev:'medium', title:'New Admin User Created', src:'10.0.0.5', dst:'DC01', port:'-', proto:'AD', cat:'Identity' },
+  { sev:'medium', title:'Suspicious PowerShell Execution', src:'10.0.0.9', dst:'LOCAL', port:'-', proto:'LOCAL', cat:'Execution' },
+  { sev:'medium', title:'SSL Certificate Mismatch', src:'10.0.0.16', dst:'203.0.113.5', port:'443', proto:'TLS', cat:'Crypto' },
+  { sev:'low', title:'ICMP Sweep Detected', src:'192.168.0.55', dst:'10.0.0.0/24', port:'-', proto:'ICMP', cat:'Recon' },
+  { sev:'low', title:'Firewall Rule Modified', src:'admin@10.0.0.1', dst:'FW-01', port:'-', proto:'MGMT', cat:'Config Change' },
+  { sev:'info', title:'User Login — Working Hours', src:'10.0.0.20', dst:'AUTH-SRV', port:'88', proto:'KRB5', cat:'Authentication' },
+  { sev:'info', title:'Backup Job Completed', src:'10.0.0.4', dst:'BACKUP-01', port:'445', proto:'SMB', cat:'System' },
+  { sev:'info', title:'AV Definitions Updated', src:'10.0.0.7', dst:'UPDATE-SRV', port:'443', proto:'HTTPS', cat:'System' },
+  { sev:'info', title:'DNS Query — Known Domain', src:'10.0.0.25', dst:'8.8.8.8', port:'53', proto:'DNS', cat:'Network' },
+];
+
+const geoPoints = [
+  { x:15, y:35 }, { x:48, y:28 }, { x:55, y:45 }, { x:75, y:40 },
+  { x:100, y:50 }, { x:125, y:38 }, { x:160, y:45 }, { x:185, y:52 },
+  { x:30, y:60 }, { x:140, y:55 }, { x:170, y:32 },
+];
+
+function siemTab(el, tab) {
+  document.querySelectorAll('.siem-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // tab switching just visual for now
+}
+
+function siemFilter(el, sev) {
+  if (siemFilters.has(sev)) siemFilters.delete(sev);
+  else siemFilters.add(sev);
+  el.classList.toggle('active');
+  renderAlerts();
+}
+
+function clearSiemAlerts() {
+  siemAlerts.length = 0;
+  Object.keys(sevCounts).forEach(k => sevCounts[k] = 0);
+  siemAlertCount = 0;
+  updateSiemCounters();
+  renderAlerts();
+  document.getElementById('siem-ip-list').innerHTML = '';
+}
+
+function padT(n) { return String(n).padStart(2,'0'); }
+function nowTime() {
+  const d = new Date();
+  return `${padT(d.getHours())}:${padT(d.getMinutes())}:${padT(d.getSeconds())}`;
+}
+
+function updateSiemCounters() {
+  document.getElementById('siem-alert-count').textContent = siemAlertCount;
+  document.getElementById('kpi-active').textContent = siemAlertCount;
+  document.getElementById('sev-c').textContent = sevCounts.critical;
+  document.getElementById('sev-h').textContent = sevCounts.high;
+  document.getElementById('sev-m').textContent = sevCounts.medium;
+  document.getElementById('sev-l').textContent = sevCounts.low;
+  document.getElementById('sev-i').textContent = sevCounts.info;
+}
+
+function renderAlerts() {
+  const feed = document.getElementById('alert-feed');
+  feed.innerHTML = '';
+  const filtered = siemAlerts.filter(a => siemFilters.has(a.sev));
+  filtered.slice(0,80).forEach((a, idx) => {
+    const row = document.createElement('div');
+    row.className = 'alert-row' + (idx === 0 && a.fresh ? ' new-alert' : '');
+    row.innerHTML = `
+      <span class="alert-sev sev-${a.sev}">${a.sev.toUpperCase()}</span>
+      <div class="alert-content">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-meta">
+          <span>🔴 ${a.src}</span>
+          <span>→ ${a.dst}</span>
+          <span>⚡ ${a.proto}:${a.port}</span>
+          <span>📂 ${a.cat}</span>
+        </div>
+      </div>
+      <div class="alert-time">${a.time}</div>`;
+    feed.appendChild(row);
+  });
+  if (filtered.length === 0) {
+    feed.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:11px;">Nessun alert per i filtri selezionati</div>';
+  }
+}
+
+function updateGeoMap() {
+  const geo = document.getElementById('siem-geo');
+  // Remove old dots except SVG
+  geo.querySelectorAll('.geo-dot').forEach(d => d.remove());
+  // Add random dots
+  const count = Math.min(siemAlertCount, 8);
+  for (let i = 0; i < count; i++) {
+    const pt = geoPoints[i % geoPoints.length];
+    const dot = document.createElement('div');
+    dot.className = 'geo-dot';
+    dot.style.left = (pt.x / 210 * 100) + '%';
+    dot.style.top = (pt.y / 100 * 100) + '%';
+    dot.style.animationDelay = (i * 0.3) + 's';
+    const colors = { critical:'#ff4444', high:'#ff8c00', medium:'#ffcc00', low:'#39ff14', info:'#00d4ff' };
+    if (siemAlerts[i]) dot.style.background = colors[siemAlerts[i].sev] || '#ff4444';
+    geo.appendChild(dot);
+  }
+}
+
+function updateIPList() {
+  const list = document.getElementById('siem-ip-list');
+  const sorted = Object.entries(siemIPs).sort((a,b) => b[1].count - a[1].count).slice(0,6);
+  list.innerHTML = sorted.map(([ip, d]) => `
+    <div class="recent-item">
+      <div class="r-ip">${ip}</div>
+      <div class="r-action">${d.last}</div>
+      <div class="r-time">${d.count} eventi · ${d.time}</div>
+    </div>`).join('');
+}
+
+function spawnSiemAlert() {
+  const tpl = alertTemplates[Math.floor(Math.random() * alertTemplates.length)];
+  const alert = { ...tpl, time: nowTime(), fresh: true };
+  siemAlerts.unshift(alert);
+  if (siemAlerts.length > 200) siemAlerts.pop();
+  siemAlertCount++;
+  sevCounts[tpl.sev]++;
+
+  // Track attacker IPs
+  const ip = tpl.src;
+  if (!siemIPs[ip]) siemIPs[ip] = { count: 0, last: '', time: '' };
+  siemIPs[ip].count++;
+  siemIPs[ip].last = tpl.title;
+  siemIPs[ip].time = alert.time;
+
+  updateSiemCounters();
+  renderAlerts();
+  updateGeoMap();
+  updateIPList();
+
+  // EPS random flicker
+  document.getElementById('kpi-eps').textContent = (780 + Math.floor(Math.random()*200));
+
+  // Flash notification for critical
+  if (tpl.sev === 'critical') {
+    showNotif('🚨 SIEM CRITICAL', tpl.title);
+  }
+
+  setTimeout(() => { if (siemAlerts[0]) siemAlerts[0].fresh = false; }, 1000);
+}
+
+// Mini bar chart
+function buildMiniChart() {
+  const chart = document.getElementById('kpi-chart');
+  chart.innerHTML = '';
+  for (let i = 0; i < 12; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'siem-mini-bar';
+    bar.style.height = (Math.random() * 22 + 4) + 'px';
+    const h = parseInt(bar.style.height);
+    if (h > 20) bar.style.background = 'rgba(255,68,68,0.5)';
+    else if (h > 15) bar.style.background = 'rgba(255,140,0,0.4)';
+    chart.appendChild(bar);
+  }
+}
+
+// Uptime counter
+setInterval(() => {
+  siemUptime++;
+  const h = Math.floor(siemUptime/3600);
+  const m = Math.floor((siemUptime%3600)/60);
+  const s = siemUptime%60;
+  const el = document.getElementById('siem-uptime');
+  if (el) el.textContent = `Uptime: ${padT(h)}:${padT(m)}:${padT(s)}`;
+}, 1000);
+
+// Alert spawner — variable rate
+let siemInterval = null;
+function startSiemEngine() {
+  if (siemInterval) return;
+  buildMiniChart();
+  // First burst
+  for (let i = 0; i < 5; i++) setTimeout(spawnSiemAlert, i * 400);
+  siemInterval = setInterval(() => {
+    spawnSiemAlert();
+    // Randomly refresh mini chart
+    if (Math.random() > 0.7) buildMiniChart();
+  }, 2500 + Math.random() * 2000);
+}
+
+// SIEM auto-start handled via MutationObserver on visibility
+const _siemObserver = new MutationObserver(() => {
+  const win = document.getElementById('siem-win');
+  if (win && win.style.display !== 'none') startSiemEngine();
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const win = document.getElementById('siem-win');
+  if (win) _siemObserver.observe(win, { attributes: true, attributeFilter: ['style'] });
+});
+
 // ── START ──
 runBoot();
 
@@ -1326,5 +1880,19 @@ document.addEventListener('keydown', (e) => {
   }
 });
 </script>
+<div style="display: none;" aria-hidden="true">
+    <h1>Santi Vadalà - Cyber Security Specialist & SOC Analyst</h1>
+    <p>Sono un professionista nel settore della sicurezza informatica, specializzato nel monitoraggio, rilevamento e risposta alle minacce informatiche (SOC - Security Operations Center).</p>
+    
+    <h2>Competenze Cyber Security & SOC Operations</h2>
+    <p>Esperienza in Information Security, Vulnerability Assessment, Log Analysis, Incident Response e minacce informatiche. Utilizzo di strumenti per il monitoraggio del traffico di rete e analisi della sicurezza.</p>
+    
+    <h2>Cyber Intelligence & OSINT</h2>
+    <p>Specialista in Cyber Intelligence e OSINT (Open Source Intelligence). Utilizzo avanzato di Maltego, Spiderfoot, Nmap, Wireshark, Metasploit e Recon-ng per attività di ricognizione e Threat Intelligence.</p>
+    
+    <h2>Sviluppo Python per la Sicurezza (SecDevOps)</h2>
+    <p>Sviluppo di script e tool di automazione per la sicurezza informatica in Python utilizzando librerie come Pwntools, Scrapy, Requests, Selenium e FastAPI. Integrazione in ambienti Linux (Kali, Ubuntu) e Docker.</p>
+</div>
+
 </body>
 </html>
