@@ -731,6 +731,26 @@
     .t-line { margin-bottom: 0px; }
     .win-title-text { font-size: 9px; }
   }
+  
+  /* ── PROMO POPUP ── */
+#promo-popup {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 400px; z-index: 10000;
+  background: rgba(14, 24, 40, 0.95);
+  border: 1px solid var(--kali-cyan);
+  border-radius: 8px; padding: 20px;
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  text-align: center; color: var(--text-primary);
+}
+.promo-title { font-family: 'Orbitron', monospace; color: var(--kali-cyan); margin-bottom: 10px; }
+.promo-btn {
+  display: inline-block; margin-top: 15px; padding: 10px 20px;
+  background: var(--kali-blue); color: #fff; text-decoration: none;
+  border-radius: 4px; font-weight: bold;
+}
+.promo-btn:hover { background: var(--kali-light); }
+  
+  
 </style>
 </head>
 <body>
@@ -745,6 +765,8 @@
 
 <!-- WALLPAPER -->
 <div id="wallpaper"></div>
+
+
 
 <!-- DESKTOP -->
 <div id="desktop" oncontextmenu="showCtxMenu(event)">
@@ -767,6 +789,25 @@
     <div class="desk-icon" ondblclick="openWindow('siem-win'); addTask('siem-win')">
       <div class="ico">🛡️</div><span>SIEM</span>
     </div>
+  </div>
+</div>
+
+<!-- PROMO WINDOW - Fissa in basso a destra -->
+<div class="window" id="promo-win" 
+     style="width: 280px; height: 180px; position: fixed; bottom: 50px; right: 20px; z-index: 9999; display: flex;">
+  <div class="win-title" onmousedown="startDrag(event,'promo-win')">
+    <div class="win-controls">
+      <button class="win-btn close" onclick="closeWindow('promo-win')"></button>
+    </div>
+    <span class="win-title-text">Offerta 2026</span>
+  </div>
+  <div class="win-body" style="padding: 15px; text-align: center; color: var(--text-primary); font-size: 11px;">
+    <p>Cybersecurity Strategy Guide</p>
+    <p style="color: var(--kali-cyan); margin: 8px 0; font-size: 14px;">9,90€</p>
+    <a href="https://santivadeveloper.gumroad.com/l/nnvrud" target="_blank" 
+       style="display: block; background: var(--kali-blue); color: #fff; padding: 6px; border-radius: 4px; text-decoration: none;">
+       ACQUISTA ORA
+    </a>
   </div>
 </div>
 
